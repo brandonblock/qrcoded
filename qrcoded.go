@@ -8,8 +8,6 @@ import (
 	"os"
 )
 
-type Version int8
-
 func main() {
 	log.Println("Hello QR Code")
 
@@ -25,8 +23,14 @@ func main() {
 	}
 }
 
+type Version int8
+
+func (v Version) PatternSize() int {
+	return 4*int(v) + 17
+}
+
 func GenerateQRCode(w io.Writer, code string, version Version) error {
-	size := 4*int(version) + 17
+	size := version.PatternSize()
 	img := image.NewNRGBA(image.Rect(0, 0, size, size))
 	return png.Encode(w, img)
 }
